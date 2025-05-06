@@ -1,11 +1,11 @@
-# Fentanyl.lua (formerly, NebulaHook, Nebulasense or Nebula.Xyz)
+# Fentanyl.lua (formerly, NebulaHook, NebulaSense or Nebula.Xyz)
 You are all welcome to use the complete and more refined version of Nebulahook. For those who may prefer the original, we have retained a button for Nebulahook/sense/.xyz as well.
 Fentanyl.lua is a project developed by an independent developer; it is a Roblox script designed for debugging purposes and is compatible with any experience on the platform.
 Please note that Fentanyl.lua was developed exclusively for educational purposes. Any harm caused to individuals or projects is not the responsibility of the script's developer.
 
 Fun-fact: The earliest build of fentanyl.lua was actually called "refillware".
 
-!!! Anything you see is subject to change without prior advice !!!
+# !!! Anything you see is subject to change without prior advice !!!
 
 Images below depict a preview of the latest Fentanyl.lua build (as writing of this file):
 ![{D8AF23E6-241F-41E5-A518-D276ECBCFB43}](https://github.com/user-attachments/assets/b1ab3b0d-229a-458d-ad0e-383b626a8a6b)
