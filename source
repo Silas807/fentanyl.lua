@@ -4675,7 +4675,7 @@ local Scripts_Tab = fentanyllua:page({name = "Scripts"})
 
 local Settings_Section_1 = Settings_Tab:section({name = "Interface",side = "left",size = 50})
 local Settings_Section_2 = Settings_Tab:section({name = "Configuration",side = "right",size = 205})
-local Settings_Section_3 = Settings_Tab:section({name = "Corruptor",side = "left",size = 500})
+local Settings_Section_3 = Settings_Tab:section({name = "Corruptor",side = "left",size = 105})
 
 local RandomStringConfig = {
 	Length = 50,
@@ -4897,30 +4897,7 @@ end})
 local CorruptorSettings = {
 	instancesPerStep = 1,
 	delayPerInstance = 0,
-	doCoreGUI = true,
 	doParents = false,
-	
-	doBaseParts = true,
-	doTerrain = true,
-	doLighting = true,
-	doSounds = true,
-	doPlayers = true,
-	doCameras = true,
-	doMouse = true,
-	doImages = true,
-	doHumanoids = true,
-	doSpawnPoints = true,
-	doCharacterRelated = true,
-	doScripts = true,
-	doConstraints = true,
-	doAdornments = true,
-	doValues = true,
-	doAttachments = true,
-	doJoints = true,
-	doSeats = true,
-	doRemotes = true,
-	doPostFX = true,
-	doUI = true,
 }
 
 
@@ -4930,68 +4907,8 @@ end})
 Settings_Section_3:slider({name = "delayPerInstance",def = CorruptorSettings.delayPerInstance, max = 1,min = 0,rounding = false,ticking = false,measuring = "",callback = function(value)
 	CorruptorSettings.delayPerInstance = value
 end})
-Settings_Section_3:toggle({name = "doCoreGUI",def = CorruptorSettings.doCoreGUI,callback = function(value)
-	CorruptorSettings.doCoreGUI = value
-end})
-Settings_Section_3:toggle({name = "doParents",def = CorruptorSettings.doParents,callback = function(value)
+Settings_Section_3:toggle({name = "doParents (BREAKS EVERYTHING)",def = CorruptorSettings.doParents,callback = function(value)
 	CorruptorSettings.doParents = value
-end})
-Settings_Section_3:toggle({name = "doBaseParts",def = CorruptorSettings.doBaseParts,callback = function(value)
-	CorruptorSettings.doBaseParts = value
-end})
-Settings_Section_3:toggle({name = "doTerrain",def = CorruptorSettings.doTerrain,callback = function(value)
-	CorruptorSettings.doTerrain = value
-end})
-Settings_Section_3:toggle({name = "doLighting",def = CorruptorSettings.doLighting,callback = function(value)
-	CorruptorSettings.doLighting = value
-end})
-Settings_Section_3:toggle({name = "doSounds",def = CorruptorSettings.doSounds,callback = function(value)
-	CorruptorSettings.doSounds = value
-end})
-Settings_Section_3:toggle({name = "doPlayers",def = CorruptorSettings.doPlayers,callback = function(value)
-	CorruptorSettings.doPlayers = value
-end})
-Settings_Section_3:toggle({name = "doCameras",def = CorruptorSettings.doCameras,callback = function(value)
-	CorruptorSettings.doCameras = value
-end})
-Settings_Section_3:toggle({name = "doMouse",def = CorruptorSettings.doMouse,callback = function(value)
-	CorruptorSettings.doMouse = value
-end})
-Settings_Section_3:toggle({name = "doImages",def = CorruptorSettings.doImages,callback = function(value)
-	CorruptorSettings.doImages = value
-end})
-Settings_Section_3:toggle({name = "doCharacterRelated",def = CorruptorSettings.doCharacterRelated,callback = function(value)
-	CorruptorSettings.doCharacterRelated = value
-end})
-Settings_Section_3:toggle({name = "doScripts",def = CorruptorSettings.doScripts,callback = function(value)
-	CorruptorSettings.doScripts = value
-end})
-Settings_Section_3:toggle({name = "doConstraints",def = CorruptorSettings.doConstraints,callback = function(value)
-	CorruptorSettings.doConstraints = value
-end})
-Settings_Section_3:toggle({name = "doAdornments",def = CorruptorSettings.doAdornments,callback = function(value)
-	CorruptorSettings.doAdornments = value
-end})
-Settings_Section_3:toggle({name = "doValues",def = CorruptorSettings.doValues,callback = function(value)
-	CorruptorSettings.doValues = value
-end})
-Settings_Section_3:toggle({name = "doAttachments",def = CorruptorSettings.doAttachments,callback = function(value)
-	CorruptorSettings.doAttachments = value
-end})
-Settings_Section_3:toggle({name = "doJoints",def = CorruptorSettings.doJoints,callback = function(value)
-	CorruptorSettings.doJoints = value
-end})
-Settings_Section_3:toggle({name = "doSeats",def = CorruptorSettings.doSeats,callback = function(value)
-	CorruptorSettings.doSeats = value
-end})
-Settings_Section_3:toggle({name = "doRemotes",def = CorruptorSettings.doRemotes,callback = function(value)
-	CorruptorSettings.doRemotes = value
-end})
-Settings_Section_3:toggle({name = "doPostFX",def = CorruptorSettings.doPostFX,callback = function(value)
-	CorruptorSettings.doPostFX = value
-end})
-Settings_Section_3:toggle({name = "doUI",def = CorruptorSettings.doUI,callback = function(value)
-	CorruptorSettings.doUI = value
 end})
 
 local CachedDecals = {}
@@ -5116,6 +5033,9 @@ Visuals_Section_Weird:button({name = "Corruptor (DANGEROUS+UNREVERTABLE)",callba
 		return Options[math.random(1,#Options)]
 	end
 	local RandomInstance = function(Parent)
+		if not (Parent and Parent ~= nil) then
+			Parent = workspace
+		end
 		return Parent:GetDescendants()[math.random(1,#game:GetDescendants())]
 	end
 	local RandomTeam = function()
@@ -5172,845 +5092,946 @@ Visuals_Section_Weird:button({name = "Corruptor (DANGEROUS+UNREVERTABLE)",callba
 			for i = 1, CorruptorSettings.instancesPerStep do
 				local Instance = game:GetDescendants()[math.random(1,#game:GetDescendants())]
 				local corrupt = function()
-					if Instance and Instance ~= nil then
+					if Instance and Instance ~= nil and Instance ~= script then
+						--pcall(function()
 						pcall(function()
 							Instance.Name = generateRandomString()
 							Instance.Archivable = RandomBoolean()
 							if CorruptorSettings.doParents then
 								Instance.Parent = RandomInstance(workspace)
 							end
-							if CorruptorSettings.doBaseParts == true then
-								if (Instance:IsA("BasePart") and not (Instance:IsA("Terrain"))) then
-									Instance.CastShadow = RandomBoolean()
-									Instance.Color = RandomColor3()
-									Instance.Material = RandomEnumItem(Enum.Material)
-									Instance.MaterialVariant = ""
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.Reflectance = RandomNumber(0, 1)
-									--Instance.Archivable = RandomBoolean()
-									Instance.Locked = RandomBoolean()
-									--Instance.Name = generateRandomString()
-									Instance.EnableFluidForces = RandomBoolean()
-									--Instance.CanCollide = RandomBoolean()
-									Instance.CanTouch = RandomBoolean()
-									Instance.CanQuery = RandomBoolean()
-									Instance.Anchored = RandomBoolean()
-									Instance.CustomPhysicalProperties = PhysicalProperties.new(
-										RandomNumber(0.0001,100),
-										RandomNumber(0,2),
-										RandomNumber(0, 1),
-										RandomNumber(0, 100),
-										RandomNumber(0, 100)
-									)
-									Instance.Massless = RandomBoolean()
-									Instance.RootPriority = RandomNumber(-127, 127, true)
-									if Instance:IsA("Part") then
-										Instance.Shape = RandomEnumItem(Enum.PartType)
-									end
-									Instance.TopSurface = RandomEnumItem(Enum.SurfaceType)
-									Instance.BottomSurface = RandomEnumItem(Enum.SurfaceType)
-									Instance.FrontSurface = RandomEnumItem(Enum.SurfaceType)
-									Instance.BackSurface = RandomEnumItem(Enum.SurfaceType)
-									Instance.RightSurface = RandomEnumItem(Enum.SurfaceType)
-									Instance.LeftSurface = RandomEnumItem(Enum.SurfaceType)
-
-									Instance.TopSurfaceInput = RandomEnumItem(Enum.InputType)
-									Instance.BottomSurfaceInput = RandomEnumItem(Enum.InputType)
-									Instance.FrontSurfaceInput = RandomEnumItem(Enum.InputType)
-									Instance.BackSurfaceInput = RandomEnumItem(Enum.InputType)
-									Instance.RightSurfaceInput = RandomEnumItem(Enum.InputType)
-									Instance.LeftSurfaceInput = RandomEnumItem(Enum.InputType)
-
-									Instance.TopParamA = RandomNumber(0, 1)
-									Instance.BottomParamA = RandomNumber(0, 1)
-									Instance.FrontParamA = RandomNumber(0, 1)
-									Instance.BackParamA = RandomNumber(0, 1)
-									Instance.RightParamA = RandomNumber(0, 1)
-									Instance.LeftParamA = RandomNumber(0, 1)
-
-									Instance.TopParamB = RandomNumber(0, 1)
-									Instance.BottomParamB = RandomNumber(0, 1)
-									Instance.FrontParamB = RandomNumber(0, 1)
-									Instance.BackParamB = RandomNumber(0, 1)
-									Instance.RightParamB = RandomNumber(0, 1)
-									Instance.LeftParamB = RandomNumber(0, 1)
-
-									Instance.AudioCanCollide = RandomBoolean()
-									Instance.CollisionGroupId = RandomNumber(0, game:GetService("PhysicsService"):GetMaxCollisionGroups(), true)            
-								end
-							end
-							if CorruptorSettings.doTerrain == true then
-								if (Instance:IsA("Terrain")) then
-									Instance:SetMaterialColor(RandomEnumItem(Enum.Material), RandomColor3())
-									Instance.WaterColor = RandomColor3()
-									Instance.WaterReflectance = RandomNumber(0, 1)
-									Instance.WaterTransparency = RandomNumber(0, 1)
-									Instance.WaterWaveSize = RandomNumber(0, 1)
-									Instance.WaterWaveSpeed = RandomNumber(0, 100)
-									Instance.CustomPhysicalProperties = PhysicalProperties.new(
-										RandomNumber(0.0001,100),
-										RandomNumber(0,2),
-										RandomNumber(0, 1),
-										RandomNumber(0, 100),
-										RandomNumber(0, 100)
-									)
-									--Instance.Name = generateRandomString()
-								end
-							end
-							if CorruptorSettings.doLighting == true then
-								if (Instance:IsA("Lighting")) then
-									Instance.Ambient = RandomColor3()
-									Instance.Brightness = RandomNumber(0,5)
-									Instance.ColorShift_Bottom = RandomColor3()
-									Instance.ColorShift_Top = RandomColor3()
-									Instance.EnvironmentDiffuseScale = RandomNumber(0, 1)
-									Instance.EnvironmentSpecularScale = RandomNumber(0, 1)
-									Instance.GlobalShadows = RandomBoolean()
-									Instance.ShadowSoftness = RandomNumber(0, 1)
-									Instance.ClockTime = RandomNumber(0, 24)
-									Instance.GeographicLatitude = RandomNumber(0, 180)
-									Instance.ExposureCompensation = RandomNumber(-0.5, 0.5)
-									--Instance.Name = generateRandomString()
-								end
-							end
-							if CorruptorSettings.doSounds == true then
-								if (Instance:IsA("Sound")) then
-									Instance.PlayOnRemove = RandomBoolean()
-									Instance.Looped = RandomBoolean()
-									Instance.Playing = RandomBoolean()
-									Instance.Volume = RandomNumber(0, 10)
-									Instance.TimePosition = RandomNumber(0, Instance.TimeLength)
-									Instance.PlaybackSpeed = RandomNumber(0,20)
-									Instance.RollOffMinDistance = RandomNumber(0, 10)
-									Instance.RollOffMaxDistance = RandomNumber(0, 10000)
-									Instance.RollOffMode = RandomEnumItem(Enum.RollOffMode)
-								end
-							end
-							if CorruptorSettings.doPlayers == true then
-								if (Instance:IsA("Player")) then
-									Instance.Team = RandomTeam()
-									Instance.Neutral = RandomBoolean()
-									Instance.TeamColor = RandomBrickColor()
-									Instance.AutoJumpEnabled = RandomBoolean()
-									Instance.CharacterAppearanceId = RandomNumber(0, 7451015981, true)
-									Instance.HealthDisplayDistance = RandomNumber(0, 100)
-									Instance.NameDisplayDistance = RandomNumber(0, 100)
-									--Instance.DevEnableMouseLock = RandomBoolean()
-									Instance.CameraMaxZoomDistance = RandomNumber(0, 10000)
-									Instance.CameraMinZoomDistance = RandomNumber(0, Instance.CameraMaxZoomDistance)
-									Instance.CameraMode = RandomEnumItem(Enum.CameraMode)
-									Instance.CanLoadCharacterAppearance = RandomBoolean()
-									Instance.ReplicationFocus = RandomInstance(workspace)
-									Instance.RespawnLocation = RandomInstance(workspace)
-									Instance.StepIdOffset = RandomNumber(-500, 500)
-									Instance.Character = RandomInstance(workspace)
-								end
-							end
-							if CorruptorSettings.doCameras == true then
-								if (Instance:IsA("Camera")) then
-									Instance.HeadLocked = RandomBoolean()
-									Instance.HeadScale = RandomNumber(0, 100)
-									Instance.VRTiltAndRollEnabled = RandomBoolean()
-									Instance.CameraType = RandomEnumItem(Enum.CameraType)
-									Instance.CameraSubject = RandomInstance(workspace)
-									Instance.FieldOfView = RandomNumber(0, 120)
-								end
-							end
-							if CorruptorSettings.doMouse == true then
-								if (Instance:IsA("Player") and Instance == LocalPlayer) then
-									Instance:GetMouse().TargetFilter = RandomInstance(workspace)
-									UIS.MouseBehavior = RandomEnumItem(Enum.MouseBehavior)
-								end
-							end
-							if CorruptorSettings.doImages == true then
-								if (Instance:IsA("Decal") or Instance:IsA("Texture")) then
-									Instance.Texture = RandomImage()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.Color3 = RandomColor3()
-								elseif Instance:IsA("FileMesh") or Instance:IsA("SpecialMesh") then
-									Instance.TextureId = RandomImage()
-								elseif Instance:IsA("CharacterMesh") then
-									Instance.BaseTextureId = RandomImage()
-									Instance.OverlayTextureId = RandomImage()
-								elseif Instance:IsA("ImageLabel") or Instance:IsA("ImageButton") or Instance:IsA("ImageHandleAdornment") then
-									Instance.Image = RandomImage()
-									if Instance:IsA("ImageHandleAdornment") then
-										Instance.Color3 = RandomColor3()
-									else 
-										Instance.ImageColor3 = RandomColor3()
-									end
-								elseif Instance:IsA("Shirt") then
-									Instance.ShirtTemplate = RandomImage()
-									Instance.Color3 = RandomColor3()
-								elseif Instance:IsA("Pants") then
-									Instance.PantsTemplate = RandomImage()
-									Instance.Color3 = RandomColor3()
-								elseif Instance:IsA("ShirtGraphic") then
-									Instance.Graphic = RandomImage()
-									Instance.Color3 = RandomColor3()
-								end
-							end
-							if CorruptorSettings.doSpawnPoints then
-								if (Instance:IsA("SpawnLocation")) then
-									Instance.Duration = RandomNumber(0, 30)
-									Instance.AllowTeamChangeOnTouch = RandomBoolean()
-									Instance.Neutral = RandomBoolean()
-									Instance.TeamColor = RandomTeam().TeamColor
-								end
-							end
-							if CorruptorSettings.doHumanoids then
-								if (Instance:IsA("Humanoid")) then
-									Instance.CameraOffset = RandomVector3(-10, 10)
-									Instance.DisplayDistanceType = RandomEnumItem(Enum.HumanoidDisplayDistanceType)
-									Instance.DisplayName = generateRandomString()
-									Instance.HealthDisplayDistance = RandomNumber(0, 500)
-									Instance.HealthDisplayType = RandomEnumItem(Enum.HumanoidHealthDisplayType)
-									Instance.NameDisplayDistance = RandomNumber(0, 500)
-									Instance.NameOcclusion = RandomEnumItem(Enum.NameOcclusion)
-									Instance.RigType = RandomEnumItem(Enum.HumanoidRigType)
-									Instance.BreakJointsOnDeath = RandomBoolean()
-									Instance.EvaluateStateMachine = RandomBoolean()
-									Instance.RequiresNeck = RandomBoolean()
-									Instance.AutoRotate = RandomBoolean()
-									Instance.Jump = RandomBoolean()
-									Instance.PlatformStand = RandomBoolean()
-									Instance.Sit = RandomBoolean()
-									--Instance.WalkToPart = RandomInstance()
-									Instance.AutomaticScalingEnabled = RandomBoolean()
-									Instance.MaxHealth = RandomNumber(0, 500)
-									Instance.Health = RandomNumber(0, Instance.MaxHealth)
-									Instance.MaxSlopeAngle = RandomNumber(0, 89.9)
-									Instance.HipHeight = RandomNumber(0, 10)
-									Instance.WalkSpeed = RandomNumber(0, 50)
-									Instance.AutoJumpEnabled = RandomBoolean()
-									Instance.JumpPower = RandomNumber(0, 100)
-									Instance.UseJumpPower = true
-									for Index, EnumItem in pairs(Enum.HumanoidStateType) do
-										Instance:SetStateEnabled(EnumItem, RandomBoolean())
-									end
-									Instance:ChangeState(RandomEnumItem(Enum.HumanoidStateType))
-								end									
-							end
-							if CorruptorSettings.doCharacterRelated == true then
-								if (Instance:IsA("BodyColors")) then
-									Instance.HeadColor3 = RandomColor3()
-									Instance.RightArmColor3 = RandomColor3()
-									Instance.LeftArmColor3 = RandomColor3()
-									Instance.RightLegColor3 = RandomColor3()
-									Instance.LeftLegColor3 = RandomColor3()
-									Instance.TorsoColor3 = RandomColor3()
-								elseif (Instance:IsA("Animator")) then
-									Instance.PreferLodEnabled = RandomBoolean()
-								elseif (Instance:IsA("Animation")) then
-									Instance.AnimationId = ""
-								end
-							end
-							if CorruptorSettings.doScripts == true then
-								if (Instance:IsA("Script") or Instance:IsA("LocalScript") and Instance ~= script) then
-									Instance.Disabled = RandomBoolean()
-								end
-							end
-							if CorruptorSettings.doConstraints == true then
-								if (Instance:IsA("AnimationConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.IsKinematic = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-								elseif (Instance:IsA("BallSocketConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Radius = RandomNumber(0, 1)
-									Instance.Enabled = RandomBoolean()
-									Instance.LimitsEnabled = RandomBoolean()
-									Instance.MaxFrictionTorque = RandomNumber(0, 1)
-								elseif (Instance:IsA("CylindricalConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.RotationAxisVisible = RandomBoolean()
-									Instance.Size = RandomNumber(0, 1)
-									Instance.Enabled = RandomBoolean()
-									Instance.AngularActuatorType = RandomEnumItem(Enum.ActuatorType)
-									Instance.AngularLimitsEnable = RandomBoolean()
-									Instance.InclinationAngle = RandomNumber(-180, 180)
-									Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
-									Instance.LimitsEnabled = RandomBoolean()
-								elseif (Instance:IsA("HingeConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Radius = RandomNumber(0, 1)
-									Instance.Enabled = RandomBoolean()
-									Instance.LimitsEnabled = RandomBoolean()
-									Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
-								elseif (Instance:IsA("NoCollisionConstraint")) then
-									Instance.Enabled = RandomBoolean()
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-								elseif (Instance:IsA("PlaneConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("PrismaticConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Size = RandomNumber(0, 1)
-									Instance.LimitsEnabled = RandomBoolean()
-									Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
-								elseif (Instance:IsA("RigidConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("RodConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Thickness = RandomNumber(0, 1)
-									Instance.Length = RandomNumber(0, 10)
-									Instance.LimitsEnabled = RandomBoolean()
-								elseif (Instance:IsA("RopeConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Thickness = RandomNumber(0, 1)
-									Instance.Length = RandomNumber(0, 10)
-									Instance.Restitution = RandomNumber(0, 1)
-									Instance.WinchEnabled = RandomBoolean()
-								elseif (Instance:IsA("SpringConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Thickness = RandomNumber(0, 1)
-									Instance.Radius = RandomNumber(0, 1)
-									Instance.Coils = RandomNumber(0, 10)
-									Instance.Damping = RandomNumber(0, 1)
-									Instance.FreeLength = RandomNumber(0, 1)
-									Instance.LimitsEnabled = RandomBoolean()
-									Instance.MaxForce = RandomNumber(0, 100000)
-									Instance.Stiffness = RandomNumber(0, 1)
-								elseif (Instance:IsA("TorsionSpringConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Thickness = RandomNumber(0, 1)
-									Instance.Radius = RandomNumber(0, 1)
-									Instance.Coils = RandomNumber(0, 10)
-									Instance.Damping = RandomNumber(0, 1)
-									Instance.LimitsEnabled = RandomBoolean()
-									Instance.MaxForce = RandomNumber(0, 100000)
-									Instance.Stiffness = RandomNumber(0, 1)
-								elseif (Instance:IsA("UniversalConstraint")) then
-									Instance.Visible = RandomBoolean()
-									Instance.Color = RandomBrickColor()
-									Instance.Enabled = RandomBoolean()
-									Instance.Radius = RandomNumber(0, 1)
-									Instance.LimitsEnabled = RandomBoolean()
-								end
-							end
-							if CorruptorSettings.doAdornments == true then
-								if (Instance:IsA("AdGui")) then
-									Instance.FallbackImage = RandomImage()
-									Instance.Active = RandomBoolean()
-									Instance.Adornee = RandomInstance()
-									Instance.AdShape = RandomEnumItem(Enum.AdShape)
-									Instance.Enabled = RandomBoolean()
-									Instance.EnableVideoAds = RandomBoolean()
-									Instance.Face = RandomEnumItem(Enum.NormalId)
-									Instance.ResetOnSpawn = RandomBoolean()
-									Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-								elseif (Instance:IsA("BoxHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Size = RandomVector3(-10, 10)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("ConeHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Height = RandomNumber(-10, 10)
-									Instance.Radius = RandomNumber(0, 10)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("CylinderHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Angle = RandomNumber(0, 360)
-									Instance.Height = RandomNumber(-10, 10)
-									Instance.InnerRadius = RandomNumber(0, 10)
-									Instance.Radius = RandomNumber(0, 10)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("ImageHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Size = RandomVector3(-10, 10)
-									Instance.Image = RandomImage()
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("LineHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Thickness = RandomNumber(0, 10)
-									Instance.Length = RandomNumber(0, 50)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("SphereHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Radius = RandomNumber(0, 10)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								elseif (Instance:IsA("WireframeHandleAdornment")) then
-									Instance.Color3 = RandomColor3()
-									Instance.Transparency = RandomNumber(0, 1)
-									Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Scale = RandomVector3(-10, 10)
-									Instance.Thickness = RandomNumber(0, 10)
-									Instance.SizeRelativeOffset = RandomVector3(-5, 5)
-									Instance.Visible = RandomBoolean()
-									Instance.ZIndex = RandomNumber(-100, 100, true)
-								end
-							end
-							if CorruptorSettings.doValues == true then
-								if (Instance:IsA("StringValue")) then
-									Instance.Value = generateRandomString()
-								elseif (Instance:IsA("IntValue")) then
-									Instance.Value = RandomNumber(-100000, 100000)
-								elseif (Instance:IsA("BoolValue")) then
-									Instance.Value = RandomBoolean()
-								elseif (Instance:IsA("NumberValue")) then
-									Instance.Value = RandomNumber(-100000, 100000)
-								elseif (Instance:IsA("BrickColorValue")) then
-									Instance.Value = RandomBrickColor()
-								elseif (Instance:IsA("CFrameValue")) then
-									Instance.Value = RandomCFrame(-1000, 1000)
-								elseif (Instance:IsA("Color3Value")) then
-									Instance.Value = RandomColor3()
-								elseif (Instance:IsA("ObjectValue")) then
-									Instance.Value = RandomInstance()
-								elseif (Instance:IsA("Vector3Value")) then
-									Instance.Value = RandomVector3(-1000, 1000)
-								elseif (Instance:IsA("DoubleConstrainedValue")) then
-									Instance.MaxValue = RandomNumber(0, 1000)
-									Instance.MinValue = RandomNumber(0, Instance.MaxValue)
-									Instance.Value = RandomNumber(Instance.MinValue, Instance.MaxValue)
-								elseif (Instance:IsA("IntConstrainedValue")) then
-									Instance.MaxValue = RandomNumber(0, 1000)
-									Instance.MinValue = RandomNumber(0, Instance.MaxValue)
-									Instance.Value = RandomNumber(Instance.MinValue, Instance.MaxValue)
-								end
-							end
-							if CorruptorSettings.doAttachments == true then
-								if (Instance:IsA("Attachment")) then
-									Instance.Visible = RandomBoolean()
-								end
-							end
-							if CorruptorSettings.doJoints == true then
-								if (Instance:IsA("Motor6D")) then
-									Instance.Enabled = RandomBoolean()
-									Instance.MaxVelocity = RandomNumber(0, 360)
-									Instance.CurrentAngle = RandomNumber(0, 360)
-									Instance.DesiredAngle = RandomNumber(0, 360)
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-								elseif (Instance:IsA("Weld")) then
-									Instance.Enabled = RandomBoolean()
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-								elseif (Instance:IsA("Glue")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("ManualGlue")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("ManualWeld")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("MotorFeature")) then
-									Instance.FaceId = RandomEnumItem(Enum.NormalId)
-									Instance.InOut = RandomEnumItem(Enum.InOut)
-									Instance.LeftRight = RandomEnumItem(Enum.LeftRight)
-									Instance.TopBottom = RandomEnumItem(Enum.TopBottom)
-								elseif (Instance:IsA("Rotate")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("RotateP")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-									Instance.BaseAngle = RandomNumber(0, 360)
-								elseif (Instance:IsA("RotateV")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-									Instance.BaseAngle = RandomNumber(0, 360)
-								elseif (Instance:IsA("VelocityMotor")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-									Instance.MaxVelocity = RandomNumber(0, 360)
-									Instance.Hole = RandomInstance()
-									Instance.DesiredAngle = RandomNumber(0, 360)
-									Instance.CurrentAngle = RandomNumber(0, 360)
-								elseif (Instance:IsA("Motor")) then
-									Instance.Part0 = RandomInstance()
-									Instance.Part1 = RandomInstance()
-									Instance.Enabled = RandomBoolean()
-									Instance.MaxVelocity = RandomNumber(0, 360)
-									Instance.DesiredAngle = RandomNumber(0, 360)
-									Instance.CurrentAngle = RandomNumber(0, 360)
-								end
-							end
-							if CorruptorSettings.doSeats == true then
-								if (Instance:IsA("Seat")) then
-									Instance.Disabled = RandomBoolean()
-								elseif (Instance:IsA("VehicleSeat")) then
-									Instance.Disabled = RandomBoolean()
-									Instance.HeadsUpDisplay = RandomBoolean()
-									Instance.MaxSpeed = RandomNumber(0, 1000)
-									Instance.Steer = RandomNumber(-1, 1)
-									Instance.SteerFloat = RandomNumber(-1, 1)
-									Instance.Throttle = RandomNumber(-1, 1)
-									Instance.ThrottleFloat = RandomNumber(-1, 1)
-									Instance.Torque = RandomNumber(0, 100)
-									Instance.TurnSpeed = RandomNumber(0, 10)
-								end
-							end
-							if CorruptorSettings.doRemotes == true then
-								if (Instance:IsA("RemoteEvent")) then
-									Instance:FireServer()
-								elseif (Instance:IsA("RemoteFunction")) then
-									Instance:InvokeServer()
-								elseif (Instance:IsA("BindableEvent")) then
-									Instance:Fire()
-								elseif (Instance:IsA("BindableRemote")) then
-									Instance:Invoke()
-								end
-							end
-							if CorruptorSettings.doPostFX == true then
-								if (Instance:IsA("Atmosphere")) then
-									Instance.Density = RandomNumber(0, 1)
-									Instance.Offset = RandomNumber(0, 1)
-									Instance.Color = RandomColor3()
-									Instance.Decay = RandomColor3()
-								elseif (Instance:IsA("Clouds")) then
-									Instance.Color = RandomColor3()
-									Instance.Enabled = RandomBoolean()
-									Instance.Cover = RandomNumber(0, 1)
-									Instance.Density = RandomNumber(0, 1)
-								elseif (Instance:IsA("Sky")) then
-									Instance.CelestialBodiesShown = RandomBoolean()
-									Instance.MoonAngularSize = RandomNumber(0, 60)
-									Instance.SunAngularSize = RandomNumber(0, 60)
-									Instance.MoonTextureId = RandomImage()
-									Instance.SunTextureId = RandomImage()
-									Instance.SkyboxBk = RandomImage()
-									Instance.SkyboxDn = RandomImage()
-									Instance.SkyboxFt = RandomImage()
-									Instance.SkyboxLf = RandomImage()
-									Instance.SkyboxRt = RandomImage()
-									Instance.SkyboxUp = RandomImage()
-									Instance.StarCount = RandomNumber(0, 5000, true)
-								elseif (Instance:IsA("BloomEffect")) then
-									Instance.Intensity = RandomNumber(0, 1)
-									Instance.Size = RandomNumber(0, 24)
-									Instance.Threshold = RandomNumber(0.8, 2)
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("BlurEffect")) then
-									Instance.Enabled = RandomBoolean()
-									Instance.Size = RandomNumber(0, 10)
-								elseif (Instance:IsA("ColorCorrectionEffect")) then
-									Instance.Enabled = RandomBoolean()
-									Instance.TintColor = RandomColor3()
-									Instance.Saturation = RandomNumber(-1, 1)
-									Instance.Contrast = RandomNumber(-1, 1)
-									Instance.Brightness = RandomNumber(-1, 1)
-								elseif (Instance:IsA("DepthOfFieldEffect")) then
-									Instance.Enabled = RandomBoolean()
-								elseif (Instance:IsA("SunRaysEffect")) then
-									Instance.Enabled = RandomBoolean()
-								end
-							end
-							if CorruptorSettings.doUI == true then
-								--Instance.DisplayOrder = RandomNumber(-2147483648, 2147483647, true)
-								if (Instance:IsA("ScreenGui")) then
-									Instance.ClipToDeviceSafeArea = RandomBoolean()
-									Instance.SafeAreaCompatibility = RandomEnumItem(Enum.SafeAreaCompatibility)
-									Instance.ScreenInsets = RandomEnumItem(Enum.ScreenInsets)
-									Instance.DisplayOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.IgnoreGuiInset = RandomBoolean()
-									Instance.ResetOnSpawn = RandomBoolean()
-									Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-								elseif (Instance:IsA("Frame")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-								elseif (Instance:IsA("ScrollingFrame")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.AutomaticCanvasSize = RandomEnumItem(Enum.AutomaticSize)
-									Instance.BottomImage = RandomImage()
-									Instance.CanvasSize = RandomUDim2(0, 500, true)
-									Instance.ElasticBehavior = RandomEnumItem(Enum.ElasticBehavior)
-									Instance.HorizontalScrollBarInset = RandomEnumItem(Enum.ScrollBarInset)
-									Instance.MidImage = RandomImage()
-									Instance.ScrollBarImageColor3 = RandomColor3()
-									Instance.ScrollBarImageTransparency = RandomNumber(0, 1)
-									Instance.ScrollBarThickness = RandomNumber(0, 30, true)
-									Instance.ScrollingDirection = RandomEnumItem(Enum.ScrollingDirection)
-									Instance.ScrollingEnabled = RandomBoolean()
-									Instance.TopImage = RandomImage()
-									Instance.VerticalScrollBarInset = RandomEnumItem(Enum.ScrollBarInset)
-									Instance.VerticalScrollBarPosition = RandomEnumItem(Enum.ScrollBarInset)
-								elseif (Instance:IsA("BillboardGui")) then
-									Instance.Active = RandomBoolean()
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Enabled = RandomBoolean()
-									Instance.LightInfluence = RandomNumber(0, 1)
-									Instance.MaxDistance = RandomNumber(0, 1000000)
-									Instance.ResetOnSpawn = RandomBoolean()
-									Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-								elseif (Instance:IsA("SurfaceGui")) then
-									Instance.ZOffset = RandomNumber(0, 10)
-									Instance.Active = RandomBoolean()
-									Instance.Adornee = RandomInstance()
-									Instance.AlwaysOnTop = RandomBoolean()
-									Instance.Face = RandomEnumItem(Enum.NormalId)
-									Instance.Enabled = RandomBoolean()
-									Instance.LightInfluence = RandomNumber(0, 1)
-									Instance.MaxDistance = RandomNumber(0, 1000000)
-									Instance.ResetOnSpawn = RandomBoolean()
-									Instance.ToolPunchThroughDistance = RandomNumber(0, 100)
-									Instance.PixelsPerStud = RandomNumber(0, 100, true)
-									Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-								elseif (Instance:IsA("TextLabel")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.Font = RandomEnumItem(Enum.Font)
-									Instance.LineHeight = RandomNumber(0, 2)
-									Instance.Text = generateRandomString()
-									Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
-									Instance.RichText = RandomBoolean()
-									Instance.TextColor3 = RandomColor3()
-									Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
-									Instance.TextScaled = RandomBoolean()
-									Instance.TextSize = RandomNumber(0, 100, true)
-									Instance.TextStrokeColor3 = RandomColor3()
-									Instance.TextStrokeTransparency = RandomNumber(0, 1)
-									Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
-									Instance.TextWrapped = RandomBoolean()
-									Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
-									Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
-								elseif (Instance:IsA("TextBox")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.Font = RandomEnumItem(Enum.Font)
-									Instance.LineHeight = RandomNumber(0, 2)
-									Instance.Text = generateRandomString()
-									Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
-									Instance.RichText = RandomBoolean()
-									Instance.TextColor3 = RandomColor3()
-									Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
-									Instance.TextScaled = RandomBoolean()
-									Instance.TextSize = RandomNumber(0, 100, true)
-									Instance.TextStrokeColor3 = RandomColor3()
-									Instance.TextStrokeTransparency = RandomNumber(0, 1)
-									Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
-									Instance.TextWrapped = RandomBoolean()
-									Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
-									Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
-									Instance.PlaceholderColor3 = RandomColor3()
-									Instance.PlaceholderText = generateRandomString()
-								elseif (Instance:IsA("ImageButton")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.Image = RandomImage()
-									Instance.ImageColor3 = RandomColor3()
-									Instance.ImageTransparency = RandomNumber(0, 1)
-									Instance.ResampleMode = RandomEnumItem(Enum.ResamplerMode)
-									Instance.ScaleType = RandomEnumItem(Enum.ScaleType)
-									Instance.PressedImage = RandomImage()
-									Instance.HoverImage = RandomImage()
-								elseif (Instance:IsA("ImageLabel")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.Image = RandomImage()
-									Instance.ImageColor3 = RandomColor3()
-									Instance.ImageTransparency = RandomNumber(0, 1)
-									Instance.ResampleMode = RandomEnumItem(Enum.ResamplerMode)
-									Instance.ScaleType = RandomEnumItem(Enum.ScaleType)
-								elseif (Instance:IsA("TextButton")) then
-									Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
-									Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
-									Instance.Enabled = RandomBoolean()
-									Instance.AutoLocalize = RandomBoolean()
-									Instance.SelectionGroup = RandomBoolean()
-									Instance.Selectable = RandomBoolean()
-									Instance.Active = RandomBoolean()
-									Instance.Draggable = RandomBoolean()
-									Instance.Style = RandomEnumItem(Enum.FrameStyle)
-									Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
-									Instance.Rotation = RandomNumber(-180, 180)
-									Instance.Interactable = RandomBoolean()
-									Instance.BackgroundColor3 = RandomColor3()
-									Instance.BackgroundTransparency = RandomNumber(0, 1)
-									Instance.BorderColor3 = RandomColor3()
-									Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
-									Instance.BorderSizePixel = RandomNumber(0, 5, true)
-									Instance.ClipsDescendants = RandomBoolean()
-									Instance.Font = RandomEnumItem(Enum.Font)
-									Instance.LineHeight = RandomNumber(0, 2)
-									Instance.Text = generateRandomString()
-									Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
-									Instance.RichText = RandomBoolean()
-									Instance.TextColor3 = RandomColor3()
-									Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
-									Instance.TextScaled = RandomBoolean()
-									Instance.TextSize = RandomNumber(0, 100, true)
-									Instance.TextStrokeColor3 = RandomColor3()
-									Instance.TextStrokeTransparency = RandomNumber(0, 1)
-									Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
-									Instance.TextWrapped = RandomBoolean()
-									Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
-									Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
-								end
-							end
 						end)
+						if (Instance:IsA("BasePart") and not (Instance:IsA("Terrain"))) then
+							Instance.CastShadow = RandomBoolean()
+							Instance.Color = RandomColor3()
+							Instance.Material = RandomEnumItem(Enum.Material)
+							Instance.MaterialVariant = ""
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.Reflectance = RandomNumber(0, 1)
+							--Instance.Archivable = RandomBoolean()
+							Instance.Locked = RandomBoolean()
+							--Instance.Name = generateRandomString()
+							Instance.EnableFluidForces = RandomBoolean()
+							--Instance.CanCollide = RandomBoolean()
+							Instance.CanTouch = RandomBoolean()
+							Instance.CanQuery = RandomBoolean()
+							Instance.Anchored = RandomBoolean()
+							Instance.CustomPhysicalProperties = PhysicalProperties.new(
+								RandomNumber(0.0001,100),
+								RandomNumber(0,2),
+								RandomNumber(0, 1),
+								RandomNumber(0, 100),
+								RandomNumber(0, 100)
+							)
+							Instance.Massless = RandomBoolean()
+							Instance.RootPriority = RandomNumber(-127, 127, true)
+							if Instance:IsA("Part") then
+								Instance.Shape = RandomEnumItem(Enum.PartType)
+							end
+							Instance.TopSurface = RandomEnumItem(Enum.SurfaceType)
+							Instance.BottomSurface = RandomEnumItem(Enum.SurfaceType)
+							Instance.FrontSurface = RandomEnumItem(Enum.SurfaceType)
+							Instance.BackSurface = RandomEnumItem(Enum.SurfaceType)
+							Instance.RightSurface = RandomEnumItem(Enum.SurfaceType)
+							Instance.LeftSurface = RandomEnumItem(Enum.SurfaceType)
+
+							Instance.TopSurfaceInput = RandomEnumItem(Enum.InputType)
+							Instance.BottomSurfaceInput = RandomEnumItem(Enum.InputType)
+							Instance.FrontSurfaceInput = RandomEnumItem(Enum.InputType)
+							Instance.BackSurfaceInput = RandomEnumItem(Enum.InputType)
+							Instance.RightSurfaceInput = RandomEnumItem(Enum.InputType)
+							Instance.LeftSurfaceInput = RandomEnumItem(Enum.InputType)
+
+							Instance.TopParamA = RandomNumber(0, 1)
+							Instance.BottomParamA = RandomNumber(0, 1)
+							Instance.FrontParamA = RandomNumber(0, 1)
+							Instance.BackParamA = RandomNumber(0, 1)
+							Instance.RightParamA = RandomNumber(0, 1)
+							Instance.LeftParamA = RandomNumber(0, 1)
+
+							Instance.TopParamB = RandomNumber(0, 1)
+							Instance.BottomParamB = RandomNumber(0, 1)
+							Instance.FrontParamB = RandomNumber(0, 1)
+							Instance.BackParamB = RandomNumber(0, 1)
+							Instance.RightParamB = RandomNumber(0, 1)
+							Instance.LeftParamB = RandomNumber(0, 1)
+
+							Instance.AudioCanCollide = RandomBoolean()
+							Instance.CollisionGroupId = RandomNumber(0, game:GetService("PhysicsService"):GetMaxCollisionGroups(), true)            
+						end
+						if (Instance:IsA("Terrain")) then
+							task.spawn(function()
+								local Allowed = {
+									Enum.Material.Asphalt,
+									Enum.Material.Basalt,
+									Enum.Material.Brick,
+									Enum.Material.Cobblestone,
+									Enum.Material.Concrete,
+									Enum.Material.CrackedLava,
+									Enum.Material.Glacier,
+									Enum.Material.Grass,
+									Enum.Material.Ground,
+									Enum.Material.Ice,
+									Enum.Material.LeafyGrass,
+									Enum.Material.Limestone,
+									Enum.Material.Mud,
+									Enum.Material.Pavement,
+									Enum.Material.Rock,
+									Enum.Material.Salt,
+									Enum.Material.Sand,
+									Enum.Material.Sandstone,
+									Enum.Material.Slate,
+									Enum.Material.Snow,
+									Enum.Material.WoodPlanks
+								}
+								for Index, Material in pairs(Allowed) do 
+									Instance:SetMaterialColor(Material, RandomColor3())
+								end
+							end)
+							Instance.WaterColor = RandomColor3()
+							Instance.WaterReflectance = RandomNumber(0, 1)
+							Instance.WaterTransparency = RandomNumber(0, 1)
+							Instance.WaterWaveSize = RandomNumber(0, 1)
+							Instance.WaterWaveSpeed = RandomNumber(0, 100)
+							Instance.CustomPhysicalProperties = PhysicalProperties.new(
+								RandomNumber(0.0001,100),
+								RandomNumber(0,2),
+								RandomNumber(0, 1),
+								RandomNumber(0, 100),
+								RandomNumber(0, 100)
+							)
+							--Instance.Name = generateRandomString()
+						end
+						if (Instance:IsA("Lighting")) then
+							Instance.Ambient = RandomColor3()
+							Instance.Brightness = RandomNumber(0,5)
+							Instance.ColorShift_Bottom = RandomColor3()
+							Instance.ColorShift_Top = RandomColor3()
+							Instance.EnvironmentDiffuseScale = RandomNumber(0, 1)
+							Instance.EnvironmentSpecularScale = RandomNumber(0, 1)
+							Instance.GlobalShadows = RandomBoolean()
+							Instance.ShadowSoftness = RandomNumber(0, 1)
+							Instance.ClockTime = RandomNumber(0, 24)
+							Instance.GeographicLatitude = RandomNumber(0, 180)
+							Instance.ExposureCompensation = RandomNumber(-0.5, 0.5)
+							--Instance.Name = generateRandomString()
+						end
+						if (Instance:IsA("Sound")) then
+							Instance.PlayOnRemove = RandomBoolean()
+							Instance.Looped = RandomBoolean()
+							Instance.Playing = RandomBoolean()
+							Instance.Volume = RandomNumber(0, 10)
+							Instance.TimePosition = RandomNumber(0, Instance.TimeLength)
+							Instance.PlaybackSpeed = RandomNumber(0,20)
+							Instance.RollOffMinDistance = RandomNumber(0, 10)
+							Instance.RollOffMaxDistance = RandomNumber(0, 10000)
+							Instance.RollOffMode = RandomEnumItem(Enum.RollOffMode)
+						end
+						if (Instance:IsA("Player")) then
+							Instance.Team = RandomTeam()
+							Instance.Neutral = RandomBoolean()
+							Instance.TeamColor = RandomBrickColor()
+							Instance.AutoJumpEnabled = RandomBoolean()
+							Instance.CharacterAppearanceId = RandomNumber(0, 7451015981, true)
+							Instance.HealthDisplayDistance = RandomNumber(0, 100)
+							Instance.NameDisplayDistance = RandomNumber(0, 100)
+							--Instance.DevEnableMouseLock = RandomBoolean()
+							Instance.CameraMaxZoomDistance = RandomNumber(0, 10000)
+							Instance.CameraMinZoomDistance = RandomNumber(0, Instance.CameraMaxZoomDistance)
+							Instance.CameraMode = RandomEnumItem(Enum.CameraMode)
+							Instance.CanLoadCharacterAppearance = RandomBoolean()
+						end
+						if (Instance:IsA("Camera")) then
+							Instance.HeadLocked = RandomBoolean()
+							Instance.HeadScale = RandomNumber(0, 100)
+							Instance.VRTiltAndRollEnabled = RandomBoolean()
+							Instance.CameraType = RandomEnumItem(Enum.CameraType)
+							Instance.FieldOfView = RandomNumber(0, 120)
+						end
+						if (Instance:IsA("Player") and Instance == LocalPlayer) then
+							UIS.MouseBehavior = RandomEnumItem(Enum.MouseBehavior)
+							UIS.MouseIcon = RandomImage()
+							UIS.MouseIconEnabled = RandomBoolean()
+						end
+						if (Instance:IsA("Decal") or Instance:IsA("Texture")) then
+							Instance.Texture = RandomImage()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.Color3 = RandomColor3()
+						elseif Instance:IsA("FileMesh") or Instance:IsA("SpecialMesh") then
+							Instance.TextureId = RandomImage()
+						elseif Instance:IsA("CharacterMesh") then
+							Instance.BaseTextureId = RandomImage()
+							Instance.OverlayTextureId = RandomImage()
+						elseif Instance:IsA("ImageLabel") or Instance:IsA("ImageButton") or Instance:IsA("ImageHandleAdornment") then
+							Instance.Image = RandomImage()
+							if Instance:IsA("ImageHandleAdornment") then
+								Instance.Color3 = RandomColor3()
+							else 
+								Instance.ImageColor3 = RandomColor3()
+							end
+						elseif Instance:IsA("Shirt") then
+							Instance.ShirtTemplate = RandomImage()
+							Instance.Color3 = RandomColor3()
+						elseif Instance:IsA("Pants") then
+							Instance.PantsTemplate = RandomImage()
+							Instance.Color3 = RandomColor3()
+						elseif Instance:IsA("ShirtGraphic") then
+							Instance.Graphic = RandomImage()
+							Instance.Color3 = RandomColor3()
+						end
+						if (Instance:IsA("SpawnLocation")) then
+							Instance.Duration = RandomNumber(0, 30)
+							Instance.AllowTeamChangeOnTouch = RandomBoolean()
+							Instance.Neutral = RandomBoolean()
+							Instance.TeamColor = RandomTeam().TeamColor
+						end
+						if (Instance:IsA("Humanoid")) then
+							Instance.CameraOffset = RandomVector3(-10, 10)
+							Instance.DisplayDistanceType = RandomEnumItem(Enum.HumanoidDisplayDistanceType)
+							Instance.DisplayName = generateRandomString()
+							Instance.HealthDisplayDistance = RandomNumber(0, 500)
+							Instance.HealthDisplayType = RandomEnumItem(Enum.HumanoidHealthDisplayType)
+							Instance.NameDisplayDistance = RandomNumber(0, 500)
+							Instance.NameOcclusion = RandomEnumItem(Enum.NameOcclusion)
+							Instance.RigType = RandomEnumItem(Enum.HumanoidRigType)
+							Instance.BreakJointsOnDeath = RandomBoolean()
+							Instance.EvaluateStateMachine = RandomBoolean()
+							Instance.RequiresNeck = RandomBoolean()
+							Instance.AutoRotate = RandomBoolean()
+							Instance.Jump = RandomBoolean()
+							Instance.PlatformStand = RandomBoolean()
+							Instance.Sit = RandomBoolean()
+							Instance.AutomaticScalingEnabled = RandomBoolean()
+							Instance.MaxHealth = RandomNumber(0, 500)
+							Instance.Health = RandomNumber(0, Instance.MaxHealth)
+							Instance.MaxSlopeAngle = RandomNumber(0, 89.9)
+							Instance.HipHeight = RandomNumber(0, 10)
+							Instance.WalkSpeed = RandomNumber(0, 50)
+							Instance.AutoJumpEnabled = RandomBoolean()
+							Instance.JumpPower = RandomNumber(0, 100)
+							Instance.UseJumpPower = true
+							for Index, EnumItem in pairs(Enum.HumanoidStateType:GetEnumItems()) do
+								if EnumItem ~= Enum.HumanoidStateType.None then
+									pcall(function()
+										Instance:SetStateEnabled(EnumItem, RandomBoolean())
+										Instance:ChangeState(RandomEnumItem(Enum.HumanoidStateType))
+									end)
+								end
+							end
+						end
+						if (Instance:IsA("BodyColors")) then
+							Instance.HeadColor3 = RandomColor3()
+							Instance.RightArmColor3 = RandomColor3()
+							Instance.LeftArmColor3 = RandomColor3()
+							Instance.RightLegColor3 = RandomColor3()
+							Instance.LeftLegColor3 = RandomColor3()
+							Instance.TorsoColor3 = RandomColor3()
+						elseif (Instance:IsA("Animator")) then
+							Instance.PreferLodEnabled = RandomBoolean()
+						elseif (Instance:IsA("Animation")) then
+							Instance.AnimationId = ""
+						end
+						if (Instance:IsA("Script") or Instance:IsA("LocalScript") and Instance ~= script) then
+							Instance.Disabled = RandomBoolean()
+						end
+						if (Instance:IsA("AnimationConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.IsKinematic = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+						elseif (Instance:IsA("BallSocketConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Radius = RandomNumber(0, 1)
+							Instance.Enabled = RandomBoolean()
+							Instance.LimitsEnabled = RandomBoolean()
+							Instance.MaxFrictionTorque = RandomNumber(0, 1)
+						elseif (Instance:IsA("CylindricalConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.RotationAxisVisible = RandomBoolean()
+							Instance.Size = RandomNumber(0, 1)
+							Instance.Enabled = RandomBoolean()
+							Instance.AngularActuatorType = RandomEnumItem(Enum.ActuatorType)
+							Instance.AngularLimitsEnable = RandomBoolean()
+							Instance.InclinationAngle = RandomNumber(-180, 180)
+							Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
+							Instance.LimitsEnabled = RandomBoolean()
+						elseif (Instance:IsA("HingeConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Radius = RandomNumber(0, 1)
+							Instance.Enabled = RandomBoolean()
+							Instance.LimitsEnabled = RandomBoolean()
+							Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
+						elseif (Instance:IsA("NoCollisionConstraint")) then
+							Instance.Enabled = RandomBoolean()
+
+
+						elseif (Instance:IsA("PlaneConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("PrismaticConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Size = RandomNumber(0, 1)
+							Instance.LimitsEnabled = RandomBoolean()
+							Instance.ActuatorType = RandomEnumItem(Enum.ActuatorType)
+						elseif (Instance:IsA("RigidConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("RodConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Thickness = RandomNumber(0, 1)
+							Instance.Length = RandomNumber(0, 10)
+							Instance.LimitsEnabled = RandomBoolean()
+						elseif (Instance:IsA("RopeConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Thickness = RandomNumber(0, 1)
+							Instance.Length = RandomNumber(0, 10)
+							Instance.Restitution = RandomNumber(0, 1)
+							Instance.WinchEnabled = RandomBoolean()
+						elseif (Instance:IsA("SpringConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Thickness = RandomNumber(0, 1)
+							Instance.Radius = RandomNumber(0, 1)
+							Instance.Coils = RandomNumber(0, 10)
+							Instance.Damping = RandomNumber(0, 1)
+							Instance.FreeLength = RandomNumber(0, 1)
+							Instance.LimitsEnabled = RandomBoolean()
+							Instance.MaxForce = RandomNumber(0, 100000)
+							Instance.Stiffness = RandomNumber(0, 1)
+						elseif (Instance:IsA("TorsionSpringConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Thickness = RandomNumber(0, 1)
+							Instance.Radius = RandomNumber(0, 1)
+							Instance.Coils = RandomNumber(0, 10)
+							Instance.Damping = RandomNumber(0, 1)
+							Instance.LimitsEnabled = RandomBoolean()
+							Instance.MaxForce = RandomNumber(0, 100000)
+							Instance.Stiffness = RandomNumber(0, 1)
+						elseif (Instance:IsA("UniversalConstraint")) then
+							Instance.Visible = RandomBoolean()
+							Instance.Color = RandomBrickColor()
+							Instance.Enabled = RandomBoolean()
+							Instance.Radius = RandomNumber(0, 1)
+							Instance.LimitsEnabled = RandomBoolean()
+						end
+						if (Instance:IsA("AdGui")) then
+							Instance.FallbackImage = RandomImage()
+							Instance.Active = RandomBoolean()
+							Instance.AdShape = RandomEnumItem(Enum.AdShape)
+							Instance.Enabled = RandomBoolean()
+							Instance.EnableVideoAds = RandomBoolean()
+							Instance.Face = RandomEnumItem(Enum.NormalId)
+							Instance.ResetOnSpawn = RandomBoolean()
+							Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+						elseif (Instance:IsA("BoxHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Size = RandomVector3(-10, 10)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("ConeHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Height = RandomNumber(-10, 10)
+							Instance.Radius = RandomNumber(0, 10)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("CylinderHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Angle = RandomNumber(0, 360)
+							Instance.Height = RandomNumber(-10, 10)
+							Instance.InnerRadius = RandomNumber(0, 10)
+							Instance.Radius = RandomNumber(0, 10)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("ImageHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Size = RandomVector2(-10, 10)
+							Instance.Image = RandomImage()
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("LineHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Thickness = RandomNumber(0, 10)
+							Instance.Length = RandomNumber(0, 50)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("SphereHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Radius = RandomNumber(0, 10)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						elseif (Instance:IsA("WireframeHandleAdornment")) then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.AdornCullingMode = RandomEnumItem(Enum.AdornCullingMode)
+
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Scale = RandomVector3(-10, 10)
+							Instance.Thickness = RandomNumber(0, 10)
+							Instance.SizeRelativeOffset = RandomVector3(-5, 5)
+							Instance.Visible = RandomBoolean()
+							Instance.ZIndex = RandomNumber(-100, 100, true)
+						end
+						if (Instance:IsA("StringValue")) then
+							Instance.Value = generateRandomString()
+						elseif (Instance:IsA("IntValue")) then
+							Instance.Value = RandomNumber(-100000, 100000)
+						elseif (Instance:IsA("BoolValue")) then
+							Instance.Value = RandomBoolean()
+						elseif (Instance:IsA("NumberValue")) then
+							Instance.Value = RandomNumber(-100000, 100000)
+						elseif (Instance:IsA("BrickColorValue")) then
+							Instance.Value = RandomBrickColor()
+						elseif (Instance:IsA("CFrameValue")) then
+							Instance.Value = RandomCFrame(-1000, 1000)
+						elseif (Instance:IsA("Color3Value")) then
+							Instance.Value = RandomColor3()
+						elseif (Instance:IsA("Vector3Value")) then
+							Instance.Value = RandomVector3(-1000, 1000)
+						elseif (Instance:IsA("DoubleConstrainedValue")) then
+							Instance.MaxValue = RandomNumber(0, 1000)
+							Instance.MinValue = RandomNumber(0, Instance.MaxValue)
+							Instance.Value = RandomNumber(Instance.MinValue, Instance.MaxValue)
+						elseif (Instance:IsA("IntConstrainedValue")) then
+							Instance.MaxValue = RandomNumber(0, 1000)
+							Instance.MinValue = RandomNumber(0, Instance.MaxValue)
+							Instance.Value = RandomNumber(Instance.MinValue, Instance.MaxValue)
+						end
+						if (Instance:IsA("Attachment")) then
+							Instance.Visible = RandomBoolean()
+						end
+						if (Instance:IsA("Motor6D")) then
+							Instance.Enabled = RandomBoolean()
+							Instance.MaxVelocity = RandomNumber(0, 360)
+							Instance.CurrentAngle = RandomNumber(0, 360)
+							Instance.DesiredAngle = RandomNumber(0, 360)
+
+
+						elseif (Instance:IsA("Weld")) then
+							Instance.Enabled = RandomBoolean()
+
+
+						elseif (Instance:IsA("Glue")) then
+
+
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("ManualGlue")) then
+
+
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("ManualWeld")) then
+
+
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("MotorFeature")) then
+							Instance.FaceId = RandomEnumItem(Enum.NormalId)
+							Instance.InOut = RandomEnumItem(Enum.InOut)
+							Instance.LeftRight = RandomEnumItem(Enum.LeftRight)
+							Instance.TopBottom = RandomEnumItem(Enum.TopBottom)
+						elseif (Instance:IsA("Rotate")) then
+
+
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("RotateP")) then
+
+
+							Instance.Enabled = RandomBoolean()
+							Instance.BaseAngle = RandomNumber(0, 360)
+						elseif (Instance:IsA("RotateV")) then
+
+
+							Instance.Enabled = RandomBoolean()
+							Instance.BaseAngle = RandomNumber(0, 360)
+						elseif (Instance:IsA("VelocityMotor")) then
+
+
+							Instance.Enabled = RandomBoolean()
+							Instance.MaxVelocity = RandomNumber(0, 360)
+							Instance.DesiredAngle = RandomNumber(0, 360)
+							Instance.CurrentAngle = RandomNumber(0, 360)
+						elseif (Instance:IsA("Motor")) then
+
+
+							Instance.Enabled = RandomBoolean()
+							Instance.MaxVelocity = RandomNumber(0, 360)
+							Instance.DesiredAngle = RandomNumber(0, 360)
+							Instance.CurrentAngle = RandomNumber(0, 360)
+						end
+						if (Instance:IsA("Seat")) then
+							Instance.Disabled = RandomBoolean()
+						elseif (Instance:IsA("VehicleSeat")) then
+							Instance.Disabled = RandomBoolean()
+							Instance.HeadsUpDisplay = RandomBoolean()
+							Instance.MaxSpeed = RandomNumber(0, 1000)
+							Instance.Steer = RandomNumber(-1, 1)
+							Instance.SteerFloat = RandomNumber(-1, 1)
+							Instance.Throttle = RandomNumber(-1, 1)
+							Instance.ThrottleFloat = RandomNumber(-1, 1)
+							Instance.Torque = RandomNumber(0, 100)
+							Instance.TurnSpeed = RandomNumber(0, 10)
+						end
+						if (Instance:IsA("RemoteEvent")) then
+							Instance:FireServer()
+						elseif (Instance:IsA("RemoteFunction")) then
+							Instance:InvokeServer()
+						elseif (Instance:IsA("BindableEvent")) then
+							Instance:Fire()
+						elseif (Instance:IsA("BindableRemote")) then
+							Instance:Invoke()
+						end
+						if (Instance:IsA("Atmosphere")) then
+							Instance.Density = RandomNumber(0, 1)
+							Instance.Offset = RandomNumber(0, 1)
+							Instance.Color = RandomColor3()
+							Instance.Decay = RandomColor3()
+						elseif (Instance:IsA("Clouds")) then
+							Instance.Color = RandomColor3()
+							Instance.Enabled = RandomBoolean()
+							Instance.Cover = RandomNumber(0, 1)
+							Instance.Density = RandomNumber(0, 1)
+						elseif (Instance:IsA("Sky")) then
+							Instance.CelestialBodiesShown = RandomBoolean()
+							Instance.MoonAngularSize = RandomNumber(0, 60)
+							Instance.SunAngularSize = RandomNumber(0, 60)
+							Instance.MoonTextureId = RandomImage()
+							Instance.SunTextureId = RandomImage()
+							Instance.SkyboxBk = RandomImage()
+							Instance.SkyboxDn = RandomImage()
+							Instance.SkyboxFt = RandomImage()
+							Instance.SkyboxLf = RandomImage()
+							Instance.SkyboxRt = RandomImage()
+							Instance.SkyboxUp = RandomImage()
+							Instance.StarCount = RandomNumber(0, 5000, true)
+						elseif (Instance:IsA("BloomEffect")) then
+							Instance.Intensity = RandomNumber(0, 1)
+							Instance.Size = RandomNumber(0, 24)
+							Instance.Threshold = RandomNumber(0.8, 2)
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("BlurEffect")) then
+							Instance.Enabled = RandomBoolean()
+							Instance.Size = RandomNumber(0, 10)
+						elseif (Instance:IsA("ColorCorrectionEffect")) then
+							Instance.Enabled = RandomBoolean()
+							Instance.TintColor = RandomColor3()
+							Instance.Saturation = RandomNumber(-1, 1)
+							Instance.Contrast = RandomNumber(-1, 1)
+							Instance.Brightness = RandomNumber(-1, 1)
+						elseif (Instance:IsA("DepthOfFieldEffect")) then
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("SunRaysEffect")) then
+							Instance.Enabled = RandomBoolean()
+						end
+						if (Instance:IsA("ScreenGui")) then
+							Instance.ClipToDeviceSafeArea = RandomBoolean()
+							Instance.SafeAreaCompatibility = RandomEnumItem(Enum.SafeAreaCompatibility)
+							Instance.ScreenInsets = RandomEnumItem(Enum.ScreenInsets)
+							Instance.DisplayOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Enabled = RandomBoolean()
+							Instance.IgnoreGuiInset = RandomBoolean()
+							Instance.ResetOnSpawn = RandomBoolean()
+							Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+						elseif (Instance:IsA("Frame")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.Style = RandomEnumItem(Enum.FrameStyle)
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+						elseif (Instance:IsA("ScrollingFrame")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.AutomaticCanvasSize = RandomEnumItem(Enum.AutomaticSize)
+							Instance.BottomImage = RandomImage()
+							Instance.CanvasSize = RandomUDim2(0, 500, true)
+							Instance.ElasticBehavior = RandomEnumItem(Enum.ElasticBehavior)
+							Instance.HorizontalScrollBarInset = RandomEnumItem(Enum.ScrollBarInset)
+							Instance.MidImage = RandomImage()
+							Instance.ScrollBarImageColor3 = RandomColor3()
+							Instance.ScrollBarImageTransparency = RandomNumber(0, 1)
+							Instance.ScrollBarThickness = RandomNumber(0, 30, true)
+							Instance.ScrollingDirection = RandomEnumItem(Enum.ScrollingDirection)
+							Instance.ScrollingEnabled = RandomBoolean()
+							Instance.TopImage = RandomImage()
+							Instance.VerticalScrollBarInset = RandomEnumItem(Enum.ScrollBarInset)
+							Instance.VerticalScrollBarPosition = RandomEnumItem(Enum.VerticalScrollBarPosition)
+						elseif (Instance:IsA("BillboardGui")) then
+							Instance.Active = RandomBoolean()
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Enabled = RandomBoolean()
+							Instance.LightInfluence = RandomNumber(0, 1)
+							Instance.MaxDistance = RandomNumber(0, 1000000)
+							Instance.ResetOnSpawn = RandomBoolean()
+							Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+						elseif (Instance:IsA("SurfaceGui")) then
+							Instance.ZOffset = RandomNumber(0, 10)
+							Instance.Active = RandomBoolean()
+							Instance.AlwaysOnTop = RandomBoolean()
+							Instance.Face = RandomEnumItem(Enum.NormalId)
+							Instance.Enabled = RandomBoolean()
+							Instance.LightInfluence = RandomNumber(0, 1)
+							Instance.MaxDistance = RandomNumber(0, 1000000)
+							Instance.ResetOnSpawn = RandomBoolean()
+							Instance.ToolPunchThroughDistance = RandomNumber(0, 100)
+							Instance.PixelsPerStud = RandomNumber(0, 100, true)
+							Instance.ZIndexBehavior = RandomEnumItem(Enum.ZIndexBehavior)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+						elseif (Instance:IsA("TextLabel")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.Font = RandomEnumItem(Enum.Font)
+							Instance.LineHeight = RandomNumber(0, 2)
+							Instance.Text = generateRandomString()
+							Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
+							Instance.RichText = RandomBoolean()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
+							Instance.TextScaled = RandomBoolean()
+							Instance.TextSize = RandomNumber(0, 100, true)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
+							Instance.TextWrapped = RandomBoolean()
+							Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
+							Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
+						elseif (Instance:IsA("TextBox")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.Font = RandomEnumItem(Enum.Font)
+							Instance.LineHeight = RandomNumber(0, 2)
+							Instance.Text = generateRandomString()
+							Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
+							Instance.RichText = RandomBoolean()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
+							Instance.TextScaled = RandomBoolean()
+							Instance.TextSize = RandomNumber(0, 100, true)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
+							Instance.TextWrapped = RandomBoolean()
+							Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
+							Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
+							Instance.PlaceholderColor3 = RandomColor3()
+							Instance.PlaceholderText = generateRandomString()
+						elseif (Instance:IsA("ImageButton")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.Image = RandomImage()
+							Instance.ImageColor3 = RandomColor3()
+							Instance.ImageTransparency = RandomNumber(0, 1)
+							Instance.ResampleMode = RandomEnumItem(Enum.ResamplerMode)
+							Instance.ScaleType = RandomEnumItem(Enum.ScaleType)
+							Instance.PressedImage = RandomImage()
+							Instance.HoverImage = RandomImage()
+						elseif (Instance:IsA("ImageLabel")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.Image = RandomImage()
+							Instance.ImageColor3 = RandomColor3()
+							Instance.ImageTransparency = RandomNumber(0, 1)
+							Instance.ResampleMode = RandomEnumItem(Enum.ResamplerMode)
+							Instance.ScaleType = RandomEnumItem(Enum.ScaleType)
+						elseif (Instance:IsA("TextButton")) then
+							Instance.LayoutOrder = RandomNumber(-2147483648, 2147483647, true)
+							Instance.ZIndex = RandomNumber(-2147483648, 2147483647, true)
+							Instance.Visible = RandomBoolean()
+							Instance.AutoLocalize = RandomBoolean()
+							Instance.SelectionGroup = RandomBoolean()
+							Instance.Selectable = RandomBoolean()
+							Instance.Active = RandomBoolean()
+							Instance.Draggable = RandomBoolean()
+							Instance.SizeConstraint = RandomEnumItem(Enum.SizeConstraint)
+							Instance.Rotation = RandomNumber(-180, 180)
+							Instance.Interactable = RandomBoolean()
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							Instance.BorderColor3 = RandomColor3()
+							Instance.BorderMode = RandomEnumItem(Enum.BorderMode)
+							Instance.BorderSizePixel = RandomNumber(0, 5, true)
+							Instance.ClipsDescendants = RandomBoolean()
+							Instance.Font = RandomEnumItem(Enum.Font)
+							Instance.LineHeight = RandomNumber(0, 2)
+							Instance.Text = generateRandomString()
+							Instance.MaxVisibleGraphemes = RandomNumber(0, #Instance.Text, true)
+							Instance.RichText = RandomBoolean()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextDirection = RandomEnumItem(Enum.TextDirection)
+							Instance.TextScaled = RandomBoolean()
+							Instance.TextSize = RandomNumber(0, 100, true)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.TextTruncate = RandomEnumItem(Enum.TextTruncate)
+							Instance.TextWrapped = RandomBoolean()
+							Instance.TextXAlignment = RandomEnumItem(Enum.TextXAlignment)
+							Instance.TextYAlignment = RandomEnumItem(Enum.TextYAlignment)
+						end
+						if (Instance:IsA("Tool")) then
+							Instance.ToolTip = generateRandomString()
+							Instance.TextureId = RandomImage()
+							Instance.CanBeDropped = RandomBoolean()
+							Instance.ManualActivationOnly = RandomBoolean()
+							Instance.RequiresHandle = RandomBoolean()
+							Instance.Enabled = RandomBoolean()
+						elseif (Instance:IsA("HopperBin")) then
+							Instance.Active = RandomBoolean()
+							Instance.BinType = RandomEnumItem(Enum.BinType)
+							Instance.TextureId = RandomImage()
+						end
+						if Instance:IsA("Accessory") then
+							Instance.AccessoryType = RandomEnumItem(Enum.AccessoryType)
+						end
+						if Instance:IsA("ClickDetector") then
+							Instance.MaxActivationDistance = RandomNumber(0, 10000, true)
+							Instance.CursorIcon = RandomImage()
+						end
+						if Instance:IsA("DragDetector") then
+							Instance.MaxActivationDistance = RandomNumber(0, 10000, true)
+							Instance.DragStyle = RandomEnumItem(Enum.DragDetectorDragStyle)
+							Instance.Enabled = RandomBoolean()
+							Instance.PermissionPolicy = RandomEnumItem(Enum.DragDetectorPermissionPolicy)
+							Instance.ResponseStyle = RandomEnumItem(Enum.DragDetectorResponseStyle)
+							Instance.RunLocally = RandomBoolean()
+							Instance.MaxDragAngle = RandomNumber(-180, 180)
+							Instance.MaxDragTranslation = RandomVector3(-180, 180)
+							Instance.MinDragAngle = RandomNumber(-180, 180)
+							Instance.MinDragTranslation = RandomVector3(-180, 180)
+							Instance.ActivatedCursorIcon = RandomImage()
+							Instance.CursorIcon = RandomImage()
+							Instance.ApplyAtCenterOfMass = RandomBoolean()
+						end
+						if Instance:IsA("ForceField") then
+							Instance.Visible = RandomBoolean()
+						end
+						if Instance:IsA("ProximityPrompt") then
+							Instance.ActionText = generateRandomString()
+							Instance.ClickablePrompt = RandomBoolean()
+							Instance.Enabled = RandomBoolean()
+							Instance.Exclusivity = RandomEnumItem(Enum.ProximityPromptExclusivity)
+							Instance.HoldDuration = RandomNumber(0, 10)
+							Instance.MaxActivationDistance = RandomNumber(0, 1000)
+							Instance.ObjectText = generateRandomString()
+							Instance.RequiresLineOfSight = RandomBoolean()
+							Instance.Style = RandomEnumItem(Enum.ProximityPromptStyle)
+							Instance.UIOffset = RandomVector2(-5, 5)
+						end
+						if Instance:IsA("ArcHandles") then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.Visible = RandomBoolean()
+						end
+						if Instance:IsA("SelectionBox") or Instance:IsA("SelectionSphere") then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.SurfaceColor3 = RandomColor3()
+							Instance.SurfaceTransparency = RandomNumber(0, 1)
+							Instance.Visible = RandomBoolean()
+							if Instance:IsA("SelectionBox") then
+								Instance.LineThickness = RandomNumber(0, 1)
+							end
+						end
+						if Instance:IsA("SurfaceSelection") then
+							Instance.Color3 = RandomColor3()
+							Instance.Transparency = RandomNumber(0, 1)
+							Instance.Visible = RandomBoolean()
+							Instance.TargetSurface = RandomEnumItem(Enum.NormalId)
+						end
+						if Instance:IsA("Dialog") then
+							Instance.BehaviorType = RandomEnumItem(Enum.DialogBehaviorType)
+							Instance.ConversationDistance = RandomNumber(0, 10000)
+							Instance.GoodbyeChoiceActive = RandomBoolean()
+							Instance.GoodbyeDialog = generateRandomString()
+							Instance.InitialPrompt = generateRandomString()
+							Instance.InUse = RandomBoolean()
+							Instance.Purpose = RandomEnumItem(Enum.DialogPurpose)
+							Instance.Tone = RandomEnumItem(Enum.DialogTone)
+							Instance.TriggerDistance = RandomNumber(0, 10000)
+							Instance.TriggerOffset = RandomVector3(-5, 5)
+						end
+						if Instance:IsA("DialogChoice") then
+							Instance.GoodbyeChoiceActive = RandomBoolean()
+							Instance.GoodbyeDialog = generateRandomString()
+							Instance.ResponseDialog = generateRandomString()
+							Instance.UserDialog = generateRandomString()
+						end
+						if Instance:IsA("Fire") then
+							Instance.Heat = RandomNumber(0, 25)
+							Instance.Color = RandomColor3()
+							Instance.Enabled = RandomBoolean()
+							Instance.SecondaryColor = RandomColor3()
+							Instance.Size = RandomNumber(2, 30)
+							Instance.TimeScale = RandomNumber(0, 1)
+						end
+						if Instance:IsA("Sparkles") then
+							Instance.SparkleColor = RandomColor3()
+							Instance.Enabled = RandomBoolean()
+							Instance.TimeScale = RandomNumber(0, 1)
+						end
+						if Instance:IsA("Smoke") then
+							Instance.Opacity = RandomNumber(0, 1)
+							Instance.Color = RandomColor3()
+							Instance.Enabled = RandomBoolean()
+							Instance.RiseVelocity = RandomNumber(0, 25)
+							Instance.Size = RandomNumber(0.1, 100)
+							Instance.TimeScale = RandomNumber(0, 1)
+						end
+						if Instance:IsA("Explosion") then
+							Instance.BlastPressure = RandomNumber(0, 500000)
+							Instance.BlastRadius = RandomNumber(0, 100)
+							Instance.DestroyJointRadiusPercent = RandomNumber(0, 100)
+							Instance.ExplosionType = RandomEnumItem(Enum.ExplosionType)
+							Instance.TimeScale = RandomNumber(0, 1)
+							Instance.Visible = RandomBoolean()
+						end
+						if Instance:IsA("Highlight") then
+							Instance.DepthMode = RandomEnumItem(Enum.HighlightDepthMode)
+							Instance.FillTransparency = RandomNumber(0, 1)
+							Instance.OutlineTransparency = RandomNumber(0, 1)
+							Instance.FillColor = RandomColor3()
+							Instance.OutlineColor = RandomColor3()
+						end
+						
+						
+					
+						
+						
 					end
 				end
 				if not (Instance:IsDescendantOf(latestScreen)) then
