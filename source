@@ -5039,6 +5039,11 @@ Visuals_Section_Weird:button({name = "Corruptor (DANGEROUS+UNREVERTABLE)",callba
 		return Parent:GetDescendants()[math.random(1,#game:GetDescendants())]
 	end
 	local RandomTeam = function()
+		if #game:GetService("Teams"):GetChildren() <= 1 then
+			for i = 1, 2 do 
+				Instance.new("Team").Parent = game:GetService("Teams")
+			end
+		end
 		return game:GetService("Teams"):GetChildren()[math.random(1,#game:GetService("Teams"):GetChildren())]
 	end
 	local RandomImage = function()
@@ -5099,6 +5104,46 @@ Visuals_Section_Weird:button({name = "Corruptor (DANGEROUS+UNREVERTABLE)",callba
 							Instance.Archivable = RandomBoolean()
 							if CorruptorSettings.doParents then
 								Instance.Parent = RandomInstance(workspace)
+							end
+							for Index = 0, math.random(0, 500) do 
+								Instance:AddTag(generateRandomString())
+								local a = math.random(0,1)
+								if a == 0 then
+									Instance:SetAttribute(generateRandomString(), generateRandomString())
+								else 
+									Instance:SetAttribute(generateRandomString(), RandomNumber(-100000, 100000))
+								end
+							end
+							for Index, Attribute in pairs(Instance:GetAttributes()) do 
+								pcall(function()
+									if typeof(Attribute) == "number" then
+										Instance:SetAttribute(Attribute, RandomNumber(-696969,696969))
+									elseif typeof(Attribute) == "string" then
+										Instance:SetAttribute(Attribute, generateRandomString())
+									elseif typeof(Attribute) == "boolean" then
+										Instance:SetAttribute(Attribute, RandomBoolean())
+									elseif typeof(Attribute) == "Font" then
+										Instance:SetAttribute(Attribute, RandomEnumItem(Enum.Font))
+									elseif typeof(Attribute) == "NumberSequence" then
+										Instance:SetAttribute(Attribute, NumberSequence.new(0, 1))
+									elseif typeof(Attribute) == "NumberRange" then
+										Instance:SetAttribute(Attribute, NumberRange.new(RandomNumber(-696969, 696969), 696969))
+									elseif typeof(Attribute) == "ColorSequence" then
+										Instance:SetAttribute(Attribute, ColorSequence.new(RandomColor3(), RandomColor3()))
+									elseif typeof(Attribute) == "UDim2" then
+										Instance:SetAttribute(Attribute, RandomUDim2(-696969, 696969, true))
+									elseif typeof(Attribute) == "BrickColor" then
+										Instance:SetAttribute(Attribute, RandomBrickColor())
+									elseif typeof(Attribute) == "CFrame" then
+										Instance:SetAttribute(Attribute, RandomCFrame(-696969, 696969))
+									elseif typeof(Attribute) == "Vector3" then
+										Instance:SetAttribute(Attribute, RandomVector3(-696969, 696969))
+									elseif typeof(Attribute) == "Color3" then
+										Instance:SetAttribute(Attribute, RandomColor3())
+									elseif typeof(Attribute) == "Vector2" then
+										Instance:SetAttribute(Attribute, RandomVector2(-696969, 696969))
+									end
+								end)
 							end
 						end)
 						if (Instance:IsA("BasePart") and not (Instance:IsA("Terrain"))) then
@@ -6027,10 +6072,83 @@ Visuals_Section_Weird:button({name = "Corruptor (DANGEROUS+UNREVERTABLE)",callba
 							Instance.FillColor = RandomColor3()
 							Instance.OutlineColor = RandomColor3()
 						end
-						
-						
-					
-						
+						if Instance:IsA("Workspace") then
+							Instance.Gravity = RandomNumber(0, 1000)
+							Instance.GlobalWind = RandomVector3(-180, 180)
+						end
+						if Instance:IsA("SoundService") then
+							Instance.AmbientReverb = RandomEnumItem(Enum.ReverbType)
+						end
+						if Instance:IsA("BubbleChatConfiguration") then
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							local ff = RandomEnumItem(Enum.Font)
+							if ff ~= Enum.Font.Unknown then
+								Instance.FontFace = Font.fromEnum(ff)
+							end
+							Instance.TailVisible = RandomBoolean()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextSize = RandomNumber(0, 48)
+							Instance.BubbleDuration = RandomNumber(0, 30)
+							Instance.BubblesSpacing = RandomNumber(0, 10)
+							Instance.Enabled = RandomBoolean()
+							Instance.MaxBubbles = RandomNumber(0, 6)
+							Instance.MaxDistance = RandomNumber(0, 1000)
+							Instance.MinimizeDistance = RandomNumber(0, 1000)
+						end
+						if Instance:IsA("TextChatCommand") then
+							Instance.AutocompleteVisible = RandomBoolean()
+							Instance.Enabled = RandomBoolean()
+							Instance.PrimaryAlias = "/".. generateRandomString()
+							Instance.SecondaryAlias = "/".. generateRandomString()
+						end
+						if Instance:IsA("ChannelTabsConfiguration") then
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							local ff = RandomEnumItem(Enum.Font)
+							if ff ~= Enum.Font.Unknown then
+								Instance.FontFace = Font.fromEnum(ff)
+							end
+							Instance.HoverBackgroundColor3 = RandomColor3()
+							Instance.SelectedTabTextColor3 = RandomColor3()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextSize = RandomNumber(0, 48)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.Enabled = RandomBoolean()
+						end
+						if Instance:IsA("ChatInputBarConfiguration") then
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							local ff = RandomEnumItem(Enum.Font)
+							if ff ~= Enum.Font.Unknown then
+								Instance.FontFace = Font.fromEnum(ff)
+							end
+							Instance.PlaceholderColor3 = RandomColor3()
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextSize = RandomNumber(0, 48)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.AutocompleteEnabled = RandomBoolean()
+							Instance.Enabled = RandomBoolean()
+						end
+						if Instance:IsA("ChatWindowConfiguration") then
+							Instance.BackgroundColor3 = RandomColor3()
+							Instance.BackgroundTransparency = RandomNumber(0, 1)
+							local ff = RandomEnumItem(Enum.Font)
+							if ff ~= Enum.Font.Unknown then
+								Instance.FontFace = Font.fromEnum(ff)
+							end
+							Instance.TextColor3 = RandomColor3()
+							Instance.TextSize = RandomNumber(0, 48)
+							Instance.TextStrokeColor3 = RandomColor3()
+							Instance.TextStrokeTransparency = RandomNumber(0, 1)
+							Instance.HorizontalAlignment = RandomEnumItem(Enum.HorizontalAlignment)
+							Instance.VerticalAlignment = RandomEnumItem(Enum.VerticalAlignment)
+							Instance.HeightScale = RandomNumber(0.5, 2)
+							Instance.WidthScale = RandomNumber(0.5, 2)
+							Instance.Enabled = RandomBoolean()
+						end
 						
 					end
 				end
