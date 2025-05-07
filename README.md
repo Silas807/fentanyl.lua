@@ -3,6 +3,8 @@ You are all welcome to use the complete and more refined version of Nebulahook. 
 Fentanyl.lua is a project developed by an independent developer; it is a Roblox script designed for debugging purposes and is compatible with any experience on the platform.
 Please note that Fentanyl.lua was developed exclusively for educational purposes. Any harm caused to individuals or projects is not the responsibility of the script's developer.
 
+Fentanyl.lua's UI library is a highly modified version of splix/gamesneeze.
+
 Fun-fact: The earliest build of fentanyl.lua was actually called "refillware".
 
 # !!! Anything you see is subject to change without prior advice !!!
